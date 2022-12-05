@@ -206,4 +206,53 @@ test4="""2-4,6-8
 2-6,4-8"""
 
 #day4a(input4)
-day4b(input4)
+# day4b(input4)
+
+
+
+def day5(s):
+    cpile = 0
+    fend = False
+    for line in s.split('\n'):
+        if not fend:
+            if cpile == 0:
+                cpile = (len(line) + 1) // 4
+                stacks = [""] * cpile
+            if line[1] == '1':
+                fend = True
+                continue
+            for i in range(0,cpile):
+                c = line[i * 4 + 1]
+                if c != ' ':
+                    stacks[i] = stacks[i] + c
+        else:
+            if len(line) == 0:
+                continue
+            match = re.match(r"""move\s(?P<N>[0-9]+)\sfrom\s(?P<from>[0-9]+)\sto\s(?P<to>[0-9]+)""", line)
+            if not match:
+                print("can't parse", line)
+                return
+            gd = match.groupdict()
+            n = int(gd["N"])
+            f = int(gd["from"]) - 1
+            t = int(gd["to"]) - 1
+            x = stacks[f][0:n]
+            stacks[f] = stacks[f][n:]
+            # stacks[t] = x[::-1] + stacks[t] # part A
+            stacks[t] = x[::1] + stacks[t] # part B
+
+    print(''.join([sz[0] for sz in stacks]))
+
+
+test5="""    [D]    
+[N] [C]    
+[Z] [M] [P]
+ 1   2   3 
+
+move 1 from 2 to 1
+move 3 from 1 to 3
+move 2 from 2 to 1
+move 1 from 1 to 2"""
+
+
+day5(input5)
