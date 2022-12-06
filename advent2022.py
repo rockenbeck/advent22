@@ -255,4 +255,29 @@ move 2 from 2 to 1
 move 1 from 1 to 2"""
 
 
-day5(input5)
+# day5(input5)
+
+
+def day7a(s):
+    for i in range(3,len(s)):
+        if s[i-3] == s[i-2] or s[i-3] == s[i-1] or s[i-3] == s[i]:
+            continue
+        if s[i-2] == s[i-1] or s[i-2] == s[i] or s[i-1] == s[i]:
+            continue
+        break
+    print(i + 1)
+
+def day7b(s):
+    n = 14
+    for i in range(n-1,len(s)):
+        c = set()
+        for ch in s[i-n+1:i+1]:
+            c.add(ch)
+        if len(c) == n:
+            break
+    print(i + 1)
+
+test6="""nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg"""
+
+# day7b(test6)
+day7b(input6)
