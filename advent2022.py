@@ -280,4 +280,113 @@ def day6b(s):
 test6="""nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg"""
 
 # day6b(test6)
-day6b(input6)
+# day6b(input6)
+
+
+
+
+test7="""$ cd /
+$ ls
+dir a
+14848514 b.txt
+8504156 c.dat
+dir d
+$ cd a
+$ ls
+dir e
+29116 f
+2557 g
+62596 h.lst
+$ cd e
+$ ls
+584 i
+$ cd ..
+$ cd ..
+$ cd d
+$ ls
+4060174 j
+8033020 d.log
+5626152 d.ext
+7214296 k"""
+
+class Dir:
+    def __init__(self, name, parent=None):
+        self.name = name
+        self.parent = parent
+        if parent != None:
+            parent.subdirs[name] = self
+        self.subdirs = {}
+        self.size = 0
+        self.total = 0
+
+def PrintDir(dir, indent=0):
+    print(' ' * indent + '- ' + dir.name + " total:", dir.total)
+    for s in dir.subdirs.values():
+        PrintDir(s, indent+1)
+
+def CalcTotals(dir):
+    dir.total = dir.size
+    for s in dir.subdirs.values():
+        dir.total += CalcTotals(s)
+    return dir.total
+
+def Sum(dir):
+    score = dir.total if dir.total <= 100000 else 0
+    for s in dir.subdirs.values():
+        score += Sum(s)
+    return score
+    
+def BestDir(dir, needed):
+    best = None
+    if dir.total >= needed:
+        best = dir
+    for s in dir.subdirs.values():
+        subbest = BestDir(s, needed)
+        if subbest != None:
+            if best == None:
+                best = subbest
+            elif subbest.total < best.total:
+                best = subbest
+    return best
+    
+def day7a(s):
+    inls = False
+    root = Dir('/')
+    cur = root
+    for line in s.split('\n'):
+        if line[0] == "$":
+            inls = False
+            if line[2:] == "ls":
+                inls = True
+            elif line[2:4] == 'cd':
+                name = line[5:]
+                if name=='/':
+                    cur = root
+                elif name=='..':
+                    cur = cur.parent
+                else:
+                    if name in cur.subdirs:
+                        cur = cur.subdirs[name]
+                    else:
+                        cur = Dir(name, cur)
+            else:
+                assert(False)
+        else:
+            assert(inls)
+            cb,name = line.split(' ')
+            if cb=="dir":
+                if name not in cur.subdirs:
+                    Dir(name, cur)
+            else:
+                cur.size += int(cb)
+
+    CalcTotals(root)
+    # print(Sum(root))
+    PrintDir(root)
+    needed = root.total - 40000000
+    print(f"{needed = }")
+    best = BestDir(root, needed)
+    print("best to delete =", best.name, best.total)
+
+# day7a(test7)
+day7a(input7)
