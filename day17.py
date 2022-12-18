@@ -1,8 +1,5 @@
 from advent_2022_inputs import *
 
-from collections import defaultdict
-
-
 test17 = """>>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>"""
 
 def collide(map, rock, pos):
@@ -36,7 +33,7 @@ def day17(gusts, crock):
         # what's an elegant way to automate this?
         # if (iRock, iGust) in starts:
         #     iPrev,yMaxPrev = starts[(iRock, iGust)]
-        #     print(f"{i = } previous {iRock = }, {iGust = } {i - iPrev} rocks ago, dy = {yMax - yMaxPrev}")
+        #     print(f"{i = } previous {i - iPrev} rocks ago, dy = {yMax - yMaxPrev}")
         # starts[(iRock,iGust)] = (i, yMax)
 
         y = yMax + 3
@@ -65,11 +62,10 @@ def day17(gusts, crock):
 
     return yMax
 
-# print(f"{day17(test17, 2022) = }") # cycle starts at i = 50, 35 long, dy = 53
-# day17(input17, 2000) # cycle starts at i = 1855, 1725 long
+print(f"{day17(test17, 2022) = }") # cycle starts at i = 50, 35 long, dy = 53
+print(f"{day17(input17, 2022) = }") # cycle starts at i = 1855, 1725 long, dy = 2659
 
-def day17b(gusts, crock, iDup, cycle, dyPerCycle):
-    iCycleStart = (iDup - cycle)
+def day17b(gusts, crock, iCycleStart, cycle, dyPerCycle):
     cCycleSkip = (crock - iCycleStart) // cycle
     dySkip = cCycleSkip * dyPerCycle
     dyLeft = day17(gusts, crock - cCycleSkip * cycle)
