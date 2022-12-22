@@ -52,6 +52,10 @@ class Monkey:
         return self.n
 
     def force(self, n, monkeys):
+        # Force monkey to have value n, by pushing forced values down in tree
+        # Might be more elegant to reorder root "=" node of tree to isolate HUMN on one side,
+        #  like one would do for regular algebra
+
         if self.n != "unk":
             return
 
